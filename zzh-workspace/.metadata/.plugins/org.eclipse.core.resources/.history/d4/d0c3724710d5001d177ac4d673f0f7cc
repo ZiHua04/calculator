@@ -1,0 +1,11 @@
+package hello;
+
+public class Helloworld {
+    public static void main(String[] args)
+    {
+    	char[] name = {'z','z','h'};
+    	MyClass a;
+    	for(char i : name)
+    	a.cout(i);
+    }
+}
