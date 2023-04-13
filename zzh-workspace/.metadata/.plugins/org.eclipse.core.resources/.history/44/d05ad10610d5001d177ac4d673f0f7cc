@@ -1,9 +1,0 @@
-package hello;
-
-public class Helloworld {
-    public static void main(String[] args) {
-    	char[] name = {'z','z','h'};
-    	for(char i : name)
-    	System.out.println(i);
-    }
-}

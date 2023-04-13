@@ -1,7 +1,0 @@
-package hello;
-
-public class Helloworld {
-    public static void main(String[] args) {
-        System.out.println("The first command line argument is " + args[0]);
-    }
-}
