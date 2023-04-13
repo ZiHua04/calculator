@@ -6,7 +6,6 @@ public class Calculator extends JFrame
 {
 	private JTextField text;//创建文本框的对象
 	private GridBagConstraints gbc;
-	
 	public Calculator()
 	{
 		setTitle("calculator");//设置窗口标题
@@ -17,7 +16,7 @@ public class Calculator extends JFrame
 		
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
-		gbc.gridy = 0;
+		gbc.gridy = 10;
 		
 		Font font = new Font("宋体", Font.PLAIN,50);//设置字体
 		text.setFont(font);//将设置的字体添加到text文本框中
@@ -25,16 +24,7 @@ public class Calculator extends JFrame
 		JPanel panel = new JPanel();//创立一个标签
 		panel.setLayout(new GridBagLayout());
 		panel.add(text,gbc);//将文本框添加到标签里
-		add(panel,BorderLayout.NORTH);//将标签添加进窗口的最上方中
-
-		JPanel PanelButton = new JPanel(new GridLayout(4,4));
-		JButton[] buttons = new JButton[16];
-	    for (int i = 0; i < buttons.length; i++) 
-	    {
-	        buttons[i] = new JButton(""+(i + 1));
-	        PanelButton.add(buttons[i]);
-	    }
-	    add(PanelButton);
+		add(panel);//将标签添加进窗口中
 		
 		setVisible(true);//使窗口可见
 	}

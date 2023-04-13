@@ -1,0 +1,17 @@
+package calculator;
+import javax.swing.*;
+
+public class MyWindow extends JFrame
+{
+	public MyWindow()
+	{
+		setTitle("calculator");
+		setSize(720,480);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setVisible(true);
+	}
+	public static void main(String[] args)
+	{
+		new MyWindow();
+	}
+}
