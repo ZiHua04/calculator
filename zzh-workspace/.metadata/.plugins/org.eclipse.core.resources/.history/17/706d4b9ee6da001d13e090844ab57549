@@ -6,7 +6,7 @@ public class Calculator extends JFrame
 {
 	private JTextField text;//创建文本框的对象
 	private GridBagConstraints gbc;
-	private String[] ButtonLabels = {"%","√","x^2","1/x","CE","C","Back","÷","7","8","9","×","4","5","6","——","1","2","3","+"," ","0",".","="};
+	private String[] ButtonLabels = {"7","8","9","/","4","5","6","*","1","2","3","+","0",".","=","-"};
 	public Calculator()
 	{
 		setTitle("calculator");//设置窗口标题
@@ -22,18 +22,17 @@ public class Calculator extends JFrame
 		Font font = new Font("宋体", Font.PLAIN,50);//设置字体
 		text.setFont(font);//将设置的字体添加到text文本框中
 		
-		JPanel PanelText = new JPanel();//创立一个文本面板
-		PanelText.setLayout(new GridBagLayout());
-		PanelText.add(text,gbc);//将文本框添加到文本面板里
-		add(PanelText,BorderLayout.NORTH);//将文本面板添加进窗口的最上方中
+		JPanel panel = new JPanel();//创立一个标签
+		panel.setLayout(new GridBagLayout());
+		panel.add(text,gbc);//将文本框添加到标签里
+		add(panel,BorderLayout.NORTH);//将标签添加进窗口的最上方中
 
-		JPanel PanelButton = new JPanel(new GridLayout(6,4));//新建一个按钮面板
-		JButton buttons[] = new JButton[ButtonLabels.length];//初始化按钮数组
+		JPanel PanelButton = new JPanel(new GridLayout(6,4));//新建一个按钮标签
+		JButton buttons[] = null;
 		for (int i = 0; i < ButtonLabels.length; i++)
 		{
 			buttons[i] = new JButton(ButtonLabels[i]);
-			buttons[i].setFont(new Font("宋体",Font.BOLD,15));//设置按钮的字体大小,粗细
-			PanelButton.add(buttons[i]);//添加到按钮面板上
+			PanelButton.add(buttons[i]);
 		}
 	    	
 	    

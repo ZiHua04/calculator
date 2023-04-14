@@ -28,12 +28,11 @@ public class Calculator extends JFrame
 		add(PanelText,BorderLayout.NORTH);//将文本面板添加进窗口的最上方中
 
 		JPanel PanelButton = new JPanel(new GridLayout(6,4));//新建一个按钮面板
-		JButton buttons[] = new JButton[ButtonLabels.length];//初始化按钮数组
+		JButton buttons[] = new JButton[ButtonLabels.length];//
 		for (int i = 0; i < ButtonLabels.length; i++)
 		{
 			buttons[i] = new JButton(ButtonLabels[i]);
-			buttons[i].setFont(new Font("宋体",Font.BOLD,15));//设置按钮的字体大小,粗细
-			PanelButton.add(buttons[i]);//添加到按钮面板上
+			PanelButton.add(buttons[i]);
 		}
 	    	
 	    

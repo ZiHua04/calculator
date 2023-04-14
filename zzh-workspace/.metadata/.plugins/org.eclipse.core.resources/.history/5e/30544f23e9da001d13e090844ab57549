@@ -32,8 +32,8 @@ public class Calculator extends JFrame
 		for (int i = 0; i < ButtonLabels.length; i++)
 		{
 			buttons[i] = new JButton(ButtonLabels[i]);
-			buttons[i].setFont(new Font("宋体",Font.BOLD,15));//设置按钮的字体大小,粗细
-			PanelButton.add(buttons[i]);//添加到按钮面板上
+			buttons[i].setFont(new Font("宋体",Font.PLAIN,15));
+			PanelButton.add(buttons[i]);
 		}
 	    	
 	    
