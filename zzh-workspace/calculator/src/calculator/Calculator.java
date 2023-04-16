@@ -11,6 +11,8 @@ public class Calculator extends JFrame implements ActionListener//继承JFrame�
 	private String[] ButtonLabels = {"%","√","x^2","1/x","CE","C","Back","÷","7","8","9","×","4","5","6","-","1","2","3","+"," ","0",".","="};
 	private double result,num1,num2;
 	private String operator;
+	int isPoint = 0;// 0表示没输入小数点 
+	int NowIn = 1;//状态
 	public Calculator()
 	{
 		setTitle("calculator");//设置窗口标题
@@ -18,7 +20,7 @@ public class Calculator extends JFrame implements ActionListener//继承JFrame�
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//窗口关闭方式
 		
 		text = new JTextField(20);//创建文本框
-		//text.setEditable(false);//让文本框变为不可输入
+		text.setEditable(false);//让文本框变为不可输入
 		
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
@@ -52,21 +54,20 @@ public class Calculator extends JFrame implements ActionListener//继承JFrame�
 	
 	public void actionPerformed(java.awt.event.ActionEvent e) {
 		String label = ((JButton)e.getSource()).getText();
-		int isPoint = 0;// 0表示没输入小数点 
-		int NowIn = 1;//1表示输入第一个2表示输入第二个
+	
 		switch (label)
 		{
 			case "CE":
 			{
 				NowIn = 1;
 				isPoint = 0;
-				text.setText(" ");
+				text.setText("");
 				break;
 			}
 			case "C":
 			{
 				isPoint = 0;
-				text.setText(" ");
+				text.setText("");
 				break;
 			}
 			case "Back":
@@ -79,71 +80,171 @@ public class Calculator extends JFrame implements ActionListener//继承JFrame�
 			{
 				if(NowIn == 1)
 				{
-					num1 = Double.parseDouble(text.getText());
 					operator = "+";
 					NowIn = 2;
 					text.setText("");
 				}
 				else if(NowIn == 2)
 				{
-					
+					operator = "+";
+					num1 += num2;
+					text.setText("");
 				}
-				
+				else if(NowIn == 3)
+				{
+					NowIn = 2;
+					num1 = result;
+					operator = "+";
+					text.setText("");
+				}
+				break;
 			}
 			case "-":
 			{
 				if(NowIn == 1)
 				{
-					num1 = Double.parseDouble(text.getText());
 					operator = "-";
 					NowIn = 2;
+					text.setText("");
+				}
+				else if(NowIn == 2)
+				{
+					operator = "-";
+					num1 += num2;
+					text.setText("");
+				}
+				else if(NowIn == 3)
+				{
+					NowIn = 2;
+					num1 = result;
+					operator = "-";
 					text.setText("");
 				}
 				break;
 			}
 			case "×":
 			{
-				num1 = Double.parseDouble(text.getText());
-				operator = "×";
-				NowIn = 2;
-				text.setText("");
+				if(NowIn == 1)
+				{
+					operator = "×";
+					NowIn = 2;
+					text.setText("");
+				}
+				else if(NowIn == 2)
+				{
+					operator = "×";
+					num1 += num2;
+					text.setText("");
+				}
+				else if(NowIn == 3)
+				{
+					NowIn = 2;
+					num1 = result;
+					operator = "×";
+					text.setText("");
+				}
 				break;
 			}
 			case "÷":
 			{
-				num1 = Double.parseDouble(text.getText());
-				operator = "÷";
-				NowIn = 2;
-				text.setText("");
+				if(NowIn == 1)
+				{
+					operator = "÷";
+					NowIn = 2;
+					text.setText("");
+				}
+				else if(NowIn == 2)
+				{
+					operator = "÷";
+					num1 += num2;
+					text.setText("");
+				}
+				else if(NowIn == 3)
+				{
+					NowIn = 2;
+					num1 = result;
+					operator = "×";
+					text.setText("÷");
+				}
+				break;
+			}
+			case ".":
+			{
+				if(isPoint == 0)
+				{
+					text.setText(text.getText()+label);
+					isPoint = 1;
+				}
+				break;
+			}
+			case "x^2":
+			{
+				
+				if(NowIn == 1)
+				{	
+					text.setText("("+text.getText()+")^2");
+					num1 = num1*num1;
+				}
+				else if(NowIn == 2)
+				{
+					text.setText("("+text.getText()+")^2");
+					num2 = num2*num2;
+				}
+				else if(NowIn == 3)
+				{
+					text.setText("("+text.getText()+")^2");
+					result = result*result;
+				}
 				break;
 			}
 			case "=":
 			{
-				num2 = Double.parseDouble(text.getText());
-				if(operator == "+")
+				if(NowIn == 1)
 				{
-					result = num1 + num2;
-					
-				}else if(operator == "-")
-				{
-					result = num1 - num2;
-				}else if(operator == "×")
-				{
-					result = num1 * num2;
-				}else if(operator == "÷")
-				{
-					result = num1 / num2;
+					NowIn = 3;
+					result = num1;
+					text.setText(Double.toString(result));
 				}
-				text.setText(Double.toString(result));
+				else if(NowIn == 2)
+				{
+					NowIn = 3;
+					if(operator == "+")
+					{
+						result = num1 + num2;
+						
+					}else if(operator == "-")
+					{
+						result = num1 - num2;
+					}else if(operator == "×")
+					{
+						result = num1 * num2;
+					}else if(operator == "÷")
+					{
+						result = num1 / num2;
+					}
+					text.setText(Double.toString(result));
+				}
+				
 				break;
 			}
 			default:
 			{
-				if(NowIn == 2)
+				if(NowIn == 1)
 				{
-					text.setText(" ");
+					text.setText(text.getText()+label);
+					num1 = Double.parseDouble(text.getText());
 				}
-				text.setText(text.getText()+label);
+				else if(NowIn == 2)
+				{
+					text.setText(text.getText()+label);
+					num2 = Double.parseDouble(text.getText());
+				}
+				else if(NowIn == 3)
+				{
+					NowIn = 1;
+					text.setText(label);
+				}
+				break;
 			}
 		
 		}
