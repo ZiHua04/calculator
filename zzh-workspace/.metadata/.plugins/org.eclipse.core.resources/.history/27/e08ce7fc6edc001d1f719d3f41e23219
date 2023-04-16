@@ -1,0 +1,25 @@
+package SoundTest;
+import javax.swing.*;
+import javax.sound.sampled.*;
+
+public class SoundTest {
+    public static void main(String[] args) throws LineUnavailableException, InterruptedException {
+        Clip clip = AudioSystem.getClip();
+        AudioInputStream inputStream = AudioSystem.getAudioInputStream(Main.class.getResourceAsStream("sound.wav"));
+        clip.open(inputStream);
+
+        // 创建按钮，并设置按钮的点击事件处理器
+        JButton button = new JButton("播放声音");
+        button.addActionListener(e -> {
+            clip.setFramePosition(0); // 从头开始播放
+            clip.start(); // 播放声音
+        });
+
+        // 创建窗口，并将按钮添加到窗口中
+        JFrame frame = new JFrame("播放声音");
+        frame.add(button);
+        frame.pack();
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+}

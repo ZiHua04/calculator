@@ -4,7 +4,7 @@ import javafx.event.ActionEvent;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class Calculator extends JFrame implements ActionListener//继承JFrame，使用ActionListener，KeyListener的接口
+public class Calculator extends JFrame implements ActionListener//继承JFrame，使用ActionListener的接口
 {
 	private JTextField text;//创建文本框的对象
 	private GridBagConstraints gbc;
@@ -53,9 +53,9 @@ public class Calculator extends JFrame implements ActionListener//继承JFrame�
 	}
 	
 	public void actionPerformed(java.awt.event.ActionEvent e) {
-		String label = ((JButton)e.getSource()).getText();//获取按钮上的标签
+		String label = ((JButton)e.getSource()).getText();
 	
-		switch (label)//NowIn表示状态，1为正在输入num1，2表示正在输入nym2，3表示得到结果result
+		switch (label)
 		{
 			case "CE":
 			{
@@ -194,44 +194,6 @@ public class Calculator extends JFrame implements ActionListener//继承JFrame�
 				{
 					text.setText("("+text.getText()+")^2");
 					result = result*result;
-				}
-				break;
-			}
-			case "1/x":
-			{
-				if(NowIn == 1)
-				{
-					text.setText("1/("+text.getText()+")");
-					num1 = 1/num1;
-				}
-				else if(NowIn == 2)
-				{
-					text.setText("1/("+text.getText()+")");
-					num2 = 1/num2;
-				}
-				else if(NowIn == 3)
-				{
-					text.setText("1/("+text.getText()+")");
-					result = 1/result;
-				}
-				break;
-			}
-			case "√":
-			{
-				if(NowIn == 1)
-				{
-					text.setText("√("+text.getText()+")");
-					num1 = Math.sqrt(num1);
-				}
-				else if(NowIn == 2)
-				{
-					text.setText("√/("+text.getText()+")");
-					num2 = Math.sqrt(num2);
-				}
-				else if(NowIn == 3)
-				{
-					text.setText("√/("+text.getText()+")");
-					result = Math.sqrt(result);
 				}
 				break;
 			}

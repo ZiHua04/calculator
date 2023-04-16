@@ -4,7 +4,7 @@ import javafx.event.ActionEvent;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class Calculator extends JFrame implements ActionListener//继承JFrame，使用ActionListener，KeyListener的接口
+public class Calculator extends JFrame implements ActionListener//继承JFrame，使用ActionListener的接口
 {
 	private JTextField text;//创建文本框的对象
 	private GridBagConstraints gbc;
@@ -53,9 +53,9 @@ public class Calculator extends JFrame implements ActionListener//继承JFrame�
 	}
 	
 	public void actionPerformed(java.awt.event.ActionEvent e) {
-		String label = ((JButton)e.getSource()).getText();//获取按钮上的标签
+		String label = ((JButton)e.getSource()).getText();
 	
-		switch (label)//NowIn表示状态，1为正在输入num1，2表示正在输入nym2，3表示得到结果result
+		switch (label)
 		{
 			case "CE":
 			{

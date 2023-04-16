@@ -4,7 +4,7 @@ import javafx.event.ActionEvent;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class Calculator extends JFrame implements ActionListener//继承JFrame，使用ActionListener，KeyListener的接口
+public class Calculator extends JFrame implements ActionListener,KeyListener//继承JFrame，使用ActionListener，KeyListener的接口
 {
 	private JTextField text;//创建文本框的对象
 	private GridBagConstraints gbc;
