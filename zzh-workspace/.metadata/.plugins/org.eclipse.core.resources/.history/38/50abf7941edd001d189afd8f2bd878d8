@@ -1,0 +1,27 @@
+package ScriptMethod; // 声明ScriptMethod类所在的包
+
+import javax.script.ScriptEngine; // 引入ScriptEngine类
+import javax.script.ScriptEngineManager; // 引入ScriptEngineManager类
+import javax.script.ScriptException; // 引入ScriptException类
+
+public class ScriptMethod {
+    private String num = "(1*(2-3)-5)+9"; // 定义表达式字符串num
+
+    public static void main(String[] args) {
+        ScriptMethod scriptMethod = new ScriptMethod(); // 创建ScriptMethod对象
+        double result = scriptMethod.evaluateExpression(scriptMethod.num); // 调用evaluateExpression方法计算表达式值
+        System.out.println("num表达式的结果为：" + result); // 输出计算结果
+    }
+
+    public double evaluateExpression(String expression) {
+        ScriptEngineManager manager = new ScriptEngineManager(); // 创建ScriptEngineManager对象
+        ScriptEngine engine = manager.getEngineByName("JavaScript"); // 获取JavaScript引擎
+        try {
+            Object result = engine.eval(expression); // 使用eval方法计算表达式值
+            return Double.parseDouble(result.toString()); // 将结果转换为double类型并返回
+        } catch (ScriptException e) { // 捕获ScriptException异常
+            e.printStackTrace(); // 输出异常信息
+        }
+        return 0; // 如果计算出错，返回0
+    }
+}

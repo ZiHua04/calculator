@@ -1,0 +1,30 @@
+package ScriptMethod;
+import javax.script.*;
+
+public class ScriptMethod
+{
+	
+	private String num = "(1*(2-3)-5)+9";
+	public static void main(String[] args)
+	{
+		ScriptMethod scriptmethod = new ScriptMethod();
+		double result = scriptmethod.evaluateExpression(scriptmethod.num);
+		System.out.println(result);
+	}
+	public double evaluateExpression(String expression)
+	{
+		ScriptEngineManager Manager = new ScriptEngineManager();
+		ScriptEngine engine = Manager.getEngineByName("JavaScript");
+		try
+		{
+			Object result = engine.eval(expression);
+			return Double.parseDouble(result.toString());
+		}
+		catch(ScriptException e)
+		{
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+}

@@ -1,0 +1,109 @@
+//package ScriptMethod;
+//import javax.script.*;
+//
+//public class ScriptMethod
+//{
+//	
+//	private String num = "(1*(2-3)-5)+9";
+//	public static void main(String[] args)
+//	{
+//		ScriptMethod scriptmethod = new ScriptMethod();
+//		double result = scriptmethod.evaluateExpression(scriptmethod.num);
+//		System.out.println(result);
+//	}
+//	public double evaluateExpression(String expression)
+//	{
+//		ScriptEngineManager Manager = new ScriptEngineManager();
+//		ScriptEngine engine = Manager.getEngineByName("JavaScript");
+//		try
+//		{
+//			Object result = engine.eval(expression);
+//			return Double.parseDouble(result.toString());
+//		}
+//		catch(ScriptException e)
+//		{
+//			e.printStackTrace();
+//		}
+//		return 0;
+//	}
+//	
+//}
+package ScriptMethod;
+import javax.swing.*;
+import javafx.event.ActionEvent;
+import java.awt.*;
+import java.awt.event.ActionListener;
+import javax.script.*;
+
+public class ScriptMethod extends JFrame implements ActionListener
+{
+	private JTextField text;//创建文本框的对象
+	private GridBagConstraints gbc;
+	private String[] ButtonLabels = {"%","√","x^2","1/x","(",")","Back","÷","7","8","9","×","4","5","6","-","1","2","3","+","CE","0",".","="};
+	public static void main(String[] args)
+	{
+		ScriptMethod scriptmethod = new ScriptMethod();
+	}
+	public ScriptMethod()
+	{
+		setTitle("calculator");//设置窗口标题
+		setSize(720,480);//设置窗口大小
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//窗口关闭方式
+		
+		text = new JTextField(20);//创建文本框
+		text.setEditable(false);//让文本框变为不可输入
+		
+		gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		
+		Font font = new Font("宋体", Font.PLAIN,50);//设置字体
+		text.setFont(font);//将设置的字体添加到text文本框中
+		
+		JPanel PanelText1 = new JPanel();//创立一个文本面板
+		JPanel PanelText2 = new JPanel();
+		PanelText1.setLayout(new GridBagLayout());
+		gbc = new GridBagConstraints();
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		
+		PanelText2.setLayout(new GridBagLayout());
+		PanelText1.add(text,gbc);//将文本框添加到文本面板里
+		
+		add(PanelText1,BorderLayout.NORTH);//将文本面板添加进窗口的最上方中
+		add(PanelText2);
+		
+		JPanel PanelButton = new JPanel(new GridLayout(6,4));//新建一个按钮面板
+		JButton buttons[] = new JButton[ButtonLabels.length];//初始化按钮数组
+		for (int i = 0; i < ButtonLabels.length; i++)
+		{
+			buttons[i] = new JButton(ButtonLabels[i]);
+			buttons[i].setFont(new Font("宋体",Font.BOLD,15));//设置按钮的字体大小,粗细
+			buttons[i].addActionListener(this);//为每个按钮添加监听器，需要在下面重写actionPerformed方法
+			PanelButton.add(buttons[i]);//添加到按钮面板上
+		}
+	    	
+	    add(PanelButton,BorderLayout.CENTER);//将按钮面版添加到窗口的中心
+	    
+	   
+
+		
+		setVisible(true);//使窗口可见
+	}
+	public void actionPerformed(java.awt.event.ActionEvent e)
+	{
+		String label = ((JButton)e.getSource()).getText();	
+		switch (label)
+		{
+			case "CE":
+			{
+				break;
+			}
+		}
+	}
+}
+
+
+
+
+

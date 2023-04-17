@@ -163,7 +163,7 @@ public class Calculator extends JFrame implements ActionListener//继承JFrame�
 				{
 					NowIn = 2;
 					num1 = result;
-					operator = "×";
+					operator = "÷";
 					text.setText("÷");
 				}
 				break;

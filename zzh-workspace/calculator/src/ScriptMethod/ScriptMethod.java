@@ -1,38 +1,86 @@
+//package ScriptMethod;
+//import javax.script.*;
+//
+//public class ScriptMethod
+//{
+//	
+//	private String num = "(1*(2-3)-5)+9";
+//	public static void main(String[] args)
+//	{
+//		ScriptMethod scriptmethod = new ScriptMethod();
+//		double result = scriptmethod.evaluateExpression(scriptmethod.num);
+//		System.out.println(result);
+//	}
+//	public double evaluateExpression(String expression)
+//	{
+//		ScriptEngineManager Manager = new ScriptEngineManager();
+//		ScriptEngine engine = Manager.getEngineByName("JavaScript");
+//		try
+//		{
+//			Object result = engine.eval(expression);
+//			return Double.parseDouble(result.toString());
+//		}
+//		catch(ScriptException e)
+//		{
+//			e.printStackTrace();
+//		}
+//		return 0;
+//	}
+//	
+//}
 package ScriptMethod;
-
 import javax.swing.*;
 import javafx.event.ActionEvent;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import javax.script.*;
 
-public class ScriptMethod extends JFrame implements ActionListener//继承JFrame，使用ActionListener的接口
+public class ScriptMethod extends JFrame implements ActionListener
 {
-	private JTextField text;//创建文本框的对象
+	private JTextField text1,text2;//创建文本框的对象
 	private GridBagConstraints gbc;
-	private String[] ButtonLabels = {"%","√","x^2","1/x","CE","C","Back","÷","7","8","9","×","4","5","6","-","1","2","3","+"," ","0",".","="};
-	private double result,num1,num2;
-	private String operator;
+	private String expression;
+	private String[] ButtonLabels = {"%","√","x^2","1/x","(",")","Back","/","7","8","9","*","4","5","6","-","1","2","3","+","CE","0",".","="};
+	private int judge = 0;
+	private int NowIn = 0;
+	private Font font1 = new Font("宋体", Font.PLAIN,50);//设置字体
+	private Font font2 = new Font("宋体", Font.PLAIN,30);//设置字体
+
+	public static void main(String[] args)
+	{
+		ScriptMethod scriptmethod = new ScriptMethod();
+	}
 	public ScriptMethod()
 	{
 		setTitle("calculator");//设置窗口标题
-		setSize(720,480);//设置窗口大小
+		setSize(720,720);//设置窗口大小
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//窗口关闭方式
 		
-		text = new JTextField(20);//创建文本框
-		//text.setEditable(false);//让文本框变为不可输入
+		text1 = new JTextField(20);//创建文本框
+		text2 = new JTextField(20);
+		text1.setEditable(false);//让文本框变为不可输入
+		text2.setEditable(false);
 		
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		
-		Font font = new Font("宋体", Font.PLAIN,50);//设置字体
-		text.setFont(font);//将设置的字体添加到text文本框中
+		text1.setFont(font1);//将设置的字体添加到text文本框中
+		text2.setFont(font1);
+		text1.setHorizontalAlignment(JTextField.RIGHT);
+		text2.setHorizontalAlignment(JTextField.RIGHT);
 		
 		JPanel PanelText = new JPanel();//创立一个文本面板
 		PanelText.setLayout(new GridBagLayout());
-		PanelText.add(text,gbc);//将文本框添加到文本面板里
-		add(PanelText,BorderLayout.NORTH);//将文本面板添加进窗口的最上方中
+		
+		PanelText.add(text1,gbc);//将文本框添加到文本面板里
+		gbc.gridy = 0;
+        PanelText.add(text1, gbc);
 
+        gbc.gridy = 1;
+        PanelText.add(text2, gbc);
+        add(PanelText,BorderLayout.NORTH);
+		
 		JPanel PanelButton = new JPanel(new GridLayout(6,4));//新建一个按钮面板
 		JButton buttons[] = new JButton[ButtonLabels.length];//初始化按钮数组
 		for (int i = 0; i < ButtonLabels.length; i++)
@@ -50,47 +98,76 @@ public class ScriptMethod extends JFrame implements ActionListener//继承JFrame
 		
 		setVisible(true);//使窗口可见
 	}
-	
-	public void actionPerformed(java.awt.event.ActionEvent e) {
-		String label = ((JButton)e.getSource()).getText();
-		int isPoint = 0;// 0表示没输入小数点 
-		int NowIn = 1;//1表示输入第一个2表示输入第二个
+	public void actionPerformed(java.awt.event.ActionEvent e)
+	{
+		String label = ((JButton)e.getSource()).getText();	
 		switch (label)
 		{
-			case "CE":
+		case "=":
+		{
+			if(NowIn != 2)
 			{
-				NowIn = 1;
-				isPoint = 0;
-				text.setText("");
-				break;
+				text1.setFont(font2);
+				text2.setFont(font1);
 			}
-			case "C":
+			NowIn = 2;
+			break;
+		}
+		case "CE":
+		{
+			text1.setText("");
+			text2.setText("");
+			break;
+		}
+		case "Back":
+		{
+			String temp = text1.getText();
+			text1.setText(temp.substring(0,temp.length()-1));
+			break;
+		}
+		default :
+		{
+			if(NowIn != 1)
 			{
-				isPoint = 0;
-				text.setText("");
-				break;
+				text1.setFont(font1);
+				text2.setFont(font2);
 			}
-			case "Back":
+			NowIn = 1;
+			text1.setText(text1.getText()+label);
+			expression = text1.getText();
+			double result = evaluateExpression(expression);
+			if(judge == 0)
 			{
-				String temp = text.getText();
-				text.setText(temp.substring(0,temp.length()-1));
-				break;
+				text2.setText("="+Double.toString(result));
 			}
-			case "=":
+			else
 			{
-				
+				text2.setText("请输入正确的运算式");
 			}
-			default:
-			{
-				text.setText(text.getText()+label);
-			}
+			
+		}
 		}
 	}
-	public static void main(String[] args)
+	public double evaluateExpression(String expression)
 	{
-		new ScriptMethod();
+		ScriptEngineManager Manager = new ScriptEngineManager();
+		ScriptEngine engine = Manager.getEngineByName("JavaScript");
+		try
+		{
+			Object result = engine.eval(expression);
+			judge = 0;
+			return Double.parseDouble(result.toString());
+		}
+		catch(ScriptException e)
+		{
+			e.printStackTrace();
+			judge = 1;
+		}
+		return 0;
 	}
-	
-	
-	
 }
+
+
+
+
+
