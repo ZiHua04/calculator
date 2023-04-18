@@ -7,6 +7,7 @@ scu22科研训练-软件开发小队第一次作业- 计算器
 ![image](https://img-blog.csdnimg.cn/88add13af39447e4b29c5499155ae34f.png)
 2、选择需要克隆的仓库
 ![image](https://img-blog.csdnimg.cn/4aa876740c0245259cd395d23a627176.png)
+我推荐选择eclipse的workspace，也就是你敲代码的文件夹
 等待片刻。
 2、编辑本地文件
 1、可以选择编译器，可跳过
