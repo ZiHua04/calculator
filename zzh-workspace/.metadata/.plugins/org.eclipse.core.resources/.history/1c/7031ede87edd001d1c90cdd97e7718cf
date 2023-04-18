@@ -42,7 +42,7 @@ public class ScriptMethod extends JFrame implements ActionListener
 	private String expression;
 	private String[] ButtonLabels = {"%","√","^2","1/x","(",")","Back","/","7","8","9","*","4","5","6","-","1","2","3","+","CE","0",".","="};
 	private int judge = 0;
-	private int NowIn = 1;
+	private int NowIn = 0;
 	private Font font1 = new Font("宋体", Font.PLAIN,50);//设置字体
 	private Font font2 = new Font("宋体", Font.PLAIN,30);//设置字体
 
@@ -102,87 +102,50 @@ public class ScriptMethod extends JFrame implements ActionListener
 	{
 		String label = ((JButton)e.getSource()).getText();	
 		switch (label)
+		{
+		case "=":
+		{
+			if(NowIn != 2)
 			{
-			case "=":
-			{
-				if(NowIn == 1)
-				{
-					text1.setFont(font2);
-					text2.setFont(font1);
-					NowIn = 2;
-				}
-				break;
+				text1.setFont(font2);
+				text2.setFont(font1);
 			}
-			case "CE":
+			NowIn = 2;
+			break;
+		}
+		case "CE":
+		{
+			text1.setText("");
+			text2.setText("");
+			break;
+		}
+		case "Back":
+		{
+			String temp = text1.getText();
+			text1.setText(temp.substring(0,temp.length()-1));
+			break;
+		}
+		default :
+		{
+			if(NowIn != 1)
 			{
-				text1.setText("");
-				text2.setText("");
-				break;
+				text1.setFont(font1);
+				text2.setFont(font2);
 			}
-			case "Back":
+			NowIn = 1;
+			text1.setText(text1.getText()+label);
+			expression = text1.getText();
+			double result = evaluateExpression(expression);
+			if(judge == 0)
 			{
-				String temp = text1.getText();
-				text1.setText(temp.substring(0,temp.length()-1));
-				break;
+				text2.setText("="+Double.toString(result));
 			}
-			case "√":
+			else
 			{
-				double num = Double.parseDouble(text1.getText());
-				double result = Math.sqrt(num);
-				text2.setText(Double.toString(result));
-				break;
+				text2.setText("请输入正确的运算式");
 			}
-			default :
-			{
-				if(NowIn == 1)
-				{
-					text1.setFont(font1);
-					text2.setFont(font2);	
-					text1.setText(text1.getText()+label);
-
-				}
-				else if(NowIn == 2)
-				{
-					text1.setFont(font1);
-					text2.setFont(font2);
-					switch (label)
-						{
-						case "1":
-						case "2":
-						case "3":
-						case "4":
-						case "5":
-						case "6":
-						case "7":
-						case "8":
-						case "9":
-						case "0":
-						{
-							text1.setText(label);
-							break;
-						}
-						default:
-						{
-							System.out.println("6666");
-							double result = evaluateExpression(text1.getText());
-							text1.setText(Double.toString(result)+label);
-						}
-					}
-					NowIn = 1;
-				}
-				
-				expression = text1.getText();
-				double result = evaluateExpression(expression);
-				if(judge == 0)
-				{
-					text2.setText("="+Double.toString(result));
-				}
-				else
-				{
-					text2.setText("请输入正确的运算式");
-				}
-				
-			}
+			
+		}
 		}
 	}
 	public double evaluateExpression(String expression)

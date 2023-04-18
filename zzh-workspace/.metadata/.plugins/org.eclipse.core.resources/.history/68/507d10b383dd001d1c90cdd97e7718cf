@@ -138,39 +138,18 @@ public class ScriptMethod extends JFrame implements ActionListener
 				{
 					text1.setFont(font1);
 					text2.setFont(font2);	
-					text1.setText(text1.getText()+label);
-
 				}
 				else if(NowIn == 2)
 				{
-					text1.setFont(font1);
-					text2.setFont(font2);
-					switch (label)
-						{
-						case "1":
-						case "2":
-						case "3":
-						case "4":
-						case "5":
-						case "6":
-						case "7":
-						case "8":
-						case "9":
-						case "0":
-						{
-							text1.setText(label);
-							break;
-						}
-						default:
-						{
-							System.out.println("6666");
-							double result = evaluateExpression(text1.getText());
-							text1.setText(Double.toString(result)+label);
-						}
+					int num = Integer.parseInt(label);
+					if(num <= 9 && num >= 0)
+					{
+						text1.setText("");
 					}
+					
 					NowIn = 1;
 				}
-				
+				text1.setText(text1.getText()+label);
 				expression = text1.getText();
 				double result = evaluateExpression(expression);
 				if(judge == 0)

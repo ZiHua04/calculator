@@ -145,6 +145,7 @@ public class ScriptMethod extends JFrame implements ActionListener
 				{
 					text1.setFont(font1);
 					text2.setFont(font2);
+					//int num = Integer.parseInt(label);
 					switch (label)
 						{
 						case "1":
