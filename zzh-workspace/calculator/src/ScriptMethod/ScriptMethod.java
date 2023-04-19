@@ -1,33 +1,3 @@
-//package ScriptMethod;
-//import javax.script.*;
-//
-//public class ScriptMethod
-//{
-//	
-//	private String num = "(1*(2-3)-5)+9";
-//	public static void main(String[] args)
-//	{
-//		ScriptMethod scriptmethod = new ScriptMethod();
-//		double result = scriptmethod.evaluateExpression(scriptmethod.num);
-//		System.out.println(result);
-//	}
-//	public double evaluateExpression(String expression)
-//	{
-//		ScriptEngineManager Manager = new ScriptEngineManager();
-//		ScriptEngine engine = Manager.getEngineByName("JavaScript");
-//		try
-//		{
-//			Object result = engine.eval(expression);
-//			return Double.parseDouble(result.toString());
-//		}
-//		catch(ScriptException e)
-//		{
-//			e.printStackTrace();
-//		}
-//		return 0;
-//	}
-//	
-//}
 package ScriptMethod;
 import javax.swing.*;
 import javafx.event.ActionEvent;
@@ -58,7 +28,7 @@ public class ScriptMethod extends JFrame implements ActionListener
 		
 		text1 = new JTextField(20);//创建文本框
 		text2 = new JTextField(20);
-		text1.setEditable(false);//让文本框变为不可输入
+		//text1.setEditable(false);//让文本框变为不可输入
 		text2.setEditable(false);
 		
 		gbc = new GridBagConstraints();
@@ -110,6 +80,16 @@ public class ScriptMethod extends JFrame implements ActionListener
 					text1.setFont(font2);
 					text2.setFont(font1);
 					NowIn = 2;
+				}
+				expression = text1.getText();
+				double result = evaluateExpression(expression);
+				if(judge == 0)
+				{
+					text2.setText("="+Double.toString(result));
+				}
+				else
+				{
+					text2.setText("请输入正确的运算式");
 				}
 				break;
 			}
@@ -203,8 +183,3 @@ public class ScriptMethod extends JFrame implements ActionListener
 		return 0;
 	}
 }
-
-
-
-
-
