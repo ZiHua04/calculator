@@ -1,0 +1,62 @@
+package StackMethod;
+import java.util.*;
+
+
+public class StackMethod{
+
+    public static void evaluateExpression(String exp)
+    {
+    	exp = exp.replaceAll("//s+", "");//去除空格
+    	exp = exp.replaceAll("//(-", "//(0-");//将负数转变为0-正数 
+    	
+    	Stack<Double> nums = new Stack<>();//数字栈
+    	Stack<Character> ops = new Stack<>();//运算符栈
+    	
+    	for (int i = 0; i < exp.length(); i++)
+    	{
+    		char ch = exp.charAt(i);//取exp中第i个字符
+    		if(ch >= '0' && ch <= '9')
+    		{
+    			int j = i;
+    			while(j < exp.length() && exp.charAt(j) >= '0' && exp.charAt(j) <= '9' || exp.charAt(j) == '.')
+    			{
+    				j++;
+    			}
+    			double num = Double.parseDouble(exp.substring(i,j));//将表达式中数字入栈
+    			i = j-1;
+    			nums.push(num);
+    		}
+    		else if(ch == '+' || ch == '-' || ch == '*' || ch == '-')
+    		{
+    			while(!ops.empty() && (ops.peek() == '*' || ops.peek() == '/') && (ch == '+' || ch == '-'))
+    			{//如果栈顶一直是*/，ch为+-，则进行计算
+    				double num1 = nums.pop();
+    				double num2 = nums.pop();
+    				char op = ops.pop();
+    				double result = calculate(num1,num2,op);
+    				nums.push(result);
+    			}
+    			ops.push(ch);
+    		}
+    	}
+    	while(!ops.empty())
+    	{
+    		double num1 = nums.pop();
+    		double num2 = nums.pop();
+    		char op = ops.pop();
+    		double result = calculate(num1,num2,op);
+    		nums.push(result);
+    	}
+    }
+    public static double calculate(double num1, double num2, char op)
+    {
+    	switch (op)
+    	{
+    	case '+': return num1+num2;
+    	case '-': return num1-num2;
+    	case '*': return num1*num2;
+    	case '/': return num1/num2;
+    	}
+    	return 0;
+    }
+}

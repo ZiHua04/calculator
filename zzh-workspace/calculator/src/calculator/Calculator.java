@@ -291,7 +291,4 @@ public class Calculator extends JFrame implements ActionListener//继承JFrame�
 	{
 		new Calculator();
 	}
-	
-	
-	
 }

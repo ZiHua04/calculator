@@ -11,8 +11,8 @@ public class ScriptMethod extends JFrame implements ActionListener
 	private GridBagConstraints gbc;
 	private String expression;
 	private String[] ButtonLabels = {"%","√","^2","1/x","(",")","Back","/","7","8","9","*","4","5","6","-","1","2","3","+","CE","0",".","="};
-	private int judge = 0;
-	private int NowIn = 1;
+	private int judge = 0;//表示输入的运算字符串是否正确
+	private int NowIn = 1;//表示输入状态
 	private Font font1 = new Font("宋体", Font.PLAIN,50);//设置字体
 	private Font font2 = new Font("宋体", Font.PLAIN,30);//设置字体
 
@@ -68,9 +68,9 @@ public class ScriptMethod extends JFrame implements ActionListener
 		
 		setVisible(true);//使窗口可见
 	}
-	public void actionPerformed(java.awt.event.ActionEvent e)
+	public void actionPerformed(java.awt.event.ActionEvent e)//实现按钮对应的动作
 	{
-		String label = ((JButton)e.getSource()).getText();	
+		String label = ((JButton)e.getSource()).getText();//将按钮上的文本转化，赋给label
 		switch (label)
 			{
 			case "=":
