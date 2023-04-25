@@ -10,7 +10,7 @@ public class ScriptMethod extends JFrame implements ActionListener
 	private JTextField text1,text2;//创建文本框的对象
 	private GridBagConstraints gbc;
 	private String expression;
-	private String[] ButtonLabels = {"%","√","^2","1/x","(",")","Back","/","7","8","9","*","4","5","6","-","1","2","3","+","CE","0",".","="};
+	private String[] ButtonLabels = {"(",")","Back","/","7","8","9","*","4","5","6","-","1","2","3","+","CE","0",".","="};
 	private int judge = 0;//表示输入的运算字符串是否正确
 	private int NowIn = 1;//表示输入状态
 	private Font font1 = new Font("宋体", Font.PLAIN,50);//设置字体
@@ -51,7 +51,7 @@ public class ScriptMethod extends JFrame implements ActionListener
         PanelText.add(text2, gbc);
         add(PanelText,BorderLayout.NORTH);
 		
-		JPanel PanelButton = new JPanel(new GridLayout(6,4));//新建一个按钮面板
+		JPanel PanelButton = new JPanel(new GridLayout(5,4));//新建一个按钮面板
 		JButton buttons[] = new JButton[ButtonLabels.length];//初始化按钮数组
 		for (int i = 0; i < ButtonLabels.length; i++)
 		{

@@ -1,0 +1,11 @@
+package test;
+
+public class Solution {
+
+	public static void main(String[] args)
+	{
+		String a = "213456";
+		a = a.replaceFirst("1", "m");
+		System.out.println(a);
+	}
+}
