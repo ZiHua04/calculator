@@ -1,6 +1,7 @@
 package StackMethod;
 import java.util.*;
 import javax.swing.*;
+import java.math.*;
 
 import ScriptMethod.ScriptMethod;
 import javafx.event.ActionEvent;
@@ -267,157 +268,125 @@ public class StackMethod extends JFrame implements ActionListener
 			}
 		}
 	}
-	public static double evaluateExpressionSimple(String expression)
-	{
-		double num = 0;
-		double result = 0;
-		char formerOps = ' ';
-        expression = expression.replaceAll("\\s+", ""); // 去除空格
-        for(int i = 0; i < expression.length(); i++)
+	private static final Map<String,Integer> OP_PRIORITY_MAP=new HashMap<String, Integer>(){
         {
-        	char ch = expression.charAt(i);
-        	if(ch >= '0' && ch <= '9')
-        	{
-        		int j = i;
-        		while(j < expression.length() && (expression.charAt(j) >= '0' && expression.charAt(j) <= '9') || expression.charAt(j) == '.')
-        		{
-        			j++;
-        		}
-        		num = Double.parseDouble(expression.substring(i,j));
-        		i = j-1;
-        	}
-        	else if(ch == '+' || ch == '-')
-        	{
-        		if(formerOps != ' ')
-        			result = applyOperator(formerOps,result,num);
-        		else result = num;
-        		formerOps = ch;
-        	}
+            put("(",0);
+            put("+",3);
+            put("-",3);
+            put("*",4);
+            put("/",4);
+            put(")",10);
         }
-        result = applyOperator(formerOps,result,num);
+    };
+
+    public double evaluateExpression(String expression){
+        Stack<String> opStack = new Stack<String>();         //运算符栈
+        Stack<BigDecimal> numStack = new Stack<BigDecimal>();       //操作数栈
+        StringBuilder numBuilder = new StringBuilder();     //当前数值的追加器
+
+        for (int i = 0;i < expression.length();i++){
+            char c = expression.charAt(i);
+            if (c >= '0' && c <= '9' || c == '.'){          //如果是数值则加入追加器
+                numBuilder.append(c);
+            }else{                                          //如果是运算符
+                if (numBuilder.length() > 0){               //如果numBuilder有值说明里面已经有一个数值
+                    numStack.push(new BigDecimal(numBuilder.toString()));     //把数值入运算符栈
+                    numBuilder.delete(0,numBuilder.length());  //清空数值
+                }
+                //读取到的字符是运算符
+                String op = String.valueOf(c);
+                if (opStack.empty()){    //如果操作数栈没有运算符
+                    opStack.push(op);
+                }else{
+                    //如果是"("则直接入运算栈
+                    if ("(".equals(op)){
+                        opStack.push(op);
+                    }else if (")".equals(op)){
+                        //如果是")"则进行括号匹配运算括号内的表达式
+                        while (!"(".equals(opStack.peek())){
+                            stackOperation(opStack,numStack);
+                        }
+                        opStack.pop();
+                    }else{
+                        //如果是运算符，需要对比当前运算符op和栈顶的运算符优先级。
+                        do {
+                            //比较当前运算符和栈顶运算符的优先级,如果nowOp和opStack栈顶元素相同或者低级，
+                            // 则进行运算，直到nowOp高于opStack栈顶
+                            if (jubgmentPriority(op,opStack.peek())){
+                                stackOperation(opStack,numStack);
+                                if (opStack.empty()){
+                                    opStack.push(op);
+                                    break;
+                                }
+                            }else {
+                                opStack.push(op);
+                                break;
+                            }
+                        }while (!opStack.empty());
+                    }
+                }
+            }
+        }
+
+        //表达式结束，追加器里面有值
+        if (numBuilder.length()>0){
+            numStack.push(new BigDecimal(numBuilder.toString()));
+        }
+
+        while (!opStack.empty()){
+            stackOperation(opStack,numStack);
+        }
+        return numStack.pop().doubleValue();
+    }
+
+    /**
+     * 进行一次二元运算
+     * @param opStack
+     * @param numStack
+     */
+    public void stackOperation(Stack<String> opStack,Stack<BigDecimal> numStack){
+        String opT = opStack.pop();              //栈顶运算符
+        BigDecimal num2 = numStack.pop();       //第二个操作数
+        BigDecimal num1 = numStack.pop();       //第一个操作数
+        BigDecimal operationNum = oneOperation(opT,num1,num2);   //num1 op num2
+
+        numStack.push(operationNum);            //把计算完的结果放入操作数栈
+    }
+
+
+//
+
+    /**
+     * 单次计算，计算为num1 op num2
+     * @param op    运算符
+     * @param num1  第一个操作数
+     * @param num2  第二个操作数
+     * @return  num1 op num2
+     */
+    public BigDecimal oneOperation(String op,BigDecimal num1,BigDecimal num2){
+        BigDecimal result = new BigDecimal(0);
+        switch (op){
+            case "+":
+                result = num1.add(num2);
+                break;
+            case "-":
+                result = num1.subtract(num2);
+                break;
+            case "*":
+                result = num1.multiply(num2);
+                break;
+            case "/":
+                result = num1.divide(num2);
+                break;
+            default:
+                break;
+        }
         return result;
-	}
+    }
+    private boolean jubgmentPriority(String op1, String op2){
+        return (OP_PRIORITY_MAP.get(op1) - OP_PRIORITY_MAP.get(op2)) <= 0;
+    }
+}
 
-	 public static double evaluateExpression(String expression)
-	 {
-		 boolean tempFlag = true;
-		 for (int i = 0; i < expression.length(); i++)
-		 {
-			 char ch = expression.charAt(i);
-			 if(ch == '*' || ch == '/' || ch == '(' || ch == ')') {
-				 tempFlag = false;
-				 break;
-			 }
-		 }
-		 if(!tempFlag) {
-	        expression = expression.replaceAll("\\s+", ""); // 去除空格
-	        expression = expression.replaceAll("\\(-", "(0-"); // 处理负数
-	        
-	        Stack<Double> operands = new Stack<>(); // 操作数栈
-	        Stack<Character> operators = new Stack<>(); // 运算符栈
 
-	        for (int i = 0; i < expression.length(); i++) {
-	            char ch = expression.charAt(i);
-	            if (ch >= '0' && ch <= '9') { // 数字
-	                int j = i;
-	                while (j < expression.length() && (expression.charAt(j) >= '0' && expression.charAt(j) <= '9' || expression.charAt(j) == '.')) {
-	                    j++;
-	                }
-	                double operand = Double.parseDouble(expression.substring(i, j));
-	                operands.push(operand);
-	                i = j - 1;
-	            } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') { // 运算符
-	                while (!operators.empty() && (operators.peek() == '*' || operators.peek() == '/') && (ch == '+' || ch == '-')) {
-	                    double operand2 = operands.pop();
-	                    double operand1 = operands.pop();
-	                    char operator = operators.pop();
-	                    double result = applyOperator(operator, operand1, operand2);
-	                    operands.push(result);
-	                }
-	                operators.push(ch);
-	            } else if (ch == '(') { // 左括号
-	                operators.push(ch);
-	            } else if (ch == ')') { // 右括号
-	                while (!operators.empty() && operators.peek() != '(') {
-	                    double operand2 = operands.pop();
-	                    double operand1 = operands.pop();
-	                    char operator = operators.pop();
-	                    double result = applyOperator(operator, operand1, operand2);
-	                    operands.push(result);
-	                }
-	                if (operators.empty()) {
-	                    judge = 2;
-	                }
-	                operators.pop();
-	            } else {
-	                judge = 1;
-	            }
-	        }
-
-	        while (!operators.empty()) { // 处理剩余的运算符和操作数
-	            if (operators.peek() == '(') {
-	                judge = 2;
-	            }
-	            double operand2 = operands.pop();
-	            double operand1 = operands.pop();
-	            char operator = operators.pop();
-	            double result = applyOperator(operator, operand1, operand2);
-	            operands.push(result);
-	        }
-
-	        if (operands.empty()) {
-	            judge = 1;
-	        }
-	        return operands.pop();
-	    }
-		 else {
-			 double num = 0;
-				double result = 0;
-				char formerOps = ' ';
-		        expression = expression.replaceAll("\\s+", ""); // 去除空格
-		        for(int i = 0; i < expression.length(); i++)
-		        {
-		        	char ch = expression.charAt(i);
-		        	if(ch >= '0' && ch <= '9')
-		        	{
-		        		int j = i;
-		        		while(j < expression.length() && (expression.charAt(j) >= '0' && expression.charAt(j) <= '9'))
-		        		{
-		        			j++;
-		        		}
-		        		num = Double.parseDouble(expression.substring(i,j));
-		        		i = j-1;
-		        	}
-		        	else if(ch == '+' || ch == '-')
-		        	{
-		        		if(formerOps != ' ')
-		        			result = applyOperator(formerOps,result,num);
-		        		else result = num;
-		        		formerOps = ch;
-		        	}
-		        }
-		        result = applyOperator(formerOps,result,num);
-		        return result;
-		 }
-	 }
-
-	    public static double applyOperator(char operator, double operand1, double operand2)
-	    {
-	        switch (operator) {
-	            case '+':
-	                return operand1 + operand2;
-	            case '-':
-	                return operand1 - operand2;
-	            case '*':
-	                return operand1 * operand2;
-	            case '/':
-	                if (operand2 == 0) {
-	                    judge = 3;
-	                }
-	                return operand1 / operand2;
-	            default:
-	                judge = 1;
-	        }
-	        return 0;
-	    }
-	}
+    
